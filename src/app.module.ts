@@ -2,8 +2,11 @@ import { Module }                            from '@nestjs/common';
 import { ConfigModule, ConfigService }       from '@nestjs/config';
 import { TypeOrmModule }                     from '@nestjs/typeorm';
 
+import databaseConf, { type DatabaseConfig } from './@core/config/db.config';
 import { AppController }                     from './app.controller';
-import databaseConf, { type DatabaseConfig } from './config/db.config';
+import { CommentsModule }                    from './modules/comments/comments.module';
+import { PostsModule }                       from './modules/posts/posts.module';
+import { UsersModule }                       from './modules/users/users.module';
 
 @Module({
   imports: [
@@ -19,6 +22,9 @@ import databaseConf, { type DatabaseConfig } from './config/db.config';
       },
       inject: [ConfigService],
     }),
+    UsersModule,
+    CommentsModule,
+    PostsModule,
   ],
   controllers: [AppController],
 })
