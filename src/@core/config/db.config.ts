@@ -12,6 +12,7 @@ export default (): DatabaseConfig => ({
     url: process.env.DATABASE_URL,
     autoLoadEntities: true,
     // namingStrategy: new PluralNamingStrategy(),
+    logging: ['query'],
     synchronize: true,
   },
 });
