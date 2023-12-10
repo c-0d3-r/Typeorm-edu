@@ -16,7 +16,9 @@ export class UsersRepository {
 
   public async getAllAndCount(): Promise<[User[], number]> {
     try {
-      const result = await this.entityManager.findAndCount(User);
+      const result = await this.entityManager.findAndCount(User, {
+        where: {},
+      });
 
       return result;
     } catch (error) {
@@ -67,7 +69,7 @@ export class UsersRepository {
         // .select(['u.id', 'u.username'])
         .from(User, 'u')
         .where('u.username LIKE :name', { name: `${name}%` })
-        .printSql()
+        // .printSql()
         .getMany();
 
       return result;

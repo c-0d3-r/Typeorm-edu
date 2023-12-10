@@ -5,6 +5,9 @@ export async function seedData(dataSource: DataSource) {
   const commentRepo = dataSource.getRepository('Comment');
   const postRepo = dataSource.getRepository('Post');
 
+  await dataSource.dropDatabase();
+  await dataSource.synchronize();
+
   const usersCount = await userRepo.count();
 
   if (!usersCount) {
@@ -27,35 +30,35 @@ export async function seedData(dataSource: DataSource) {
       {
         title: 'title1',
         content: 'content1',
-        author: users.identifiers[0].id,
+        authorId: users.identifiers[0].id,
       },
       {
         title: 'title2',
         content: 'content2',
-        author: users.identifiers[1].id,
+        authorId: users.identifiers[1].id,
       },
       {
         title: 'title3',
         content: 'content3',
-        author: users.identifiers[2].id,
+        authorId: users.identifiers[2].id,
       },
     ]);
 
     await commentRepo.insert([
       {
         text: 'comment1',
-        author: users.identifiers[0].id,
-        post: posts.identifiers[0].id,
+        authorId: users.identifiers[0].id,
+        postId: posts.identifiers[0].id,
       },
       {
         text: 'comment2',
-        author: users.identifiers[1].id,
-        post: posts.identifiers[1].id,
+        authorId: users.identifiers[1].id,
+        postId: posts.identifiers[1].id,
       },
       {
         text: 'comment3',
-        author: users.identifiers[2].id,
-        post: posts.identifiers[2].id,
+        authorId: users.identifiers[2].id,
+        postId: posts.identifiers[2].id,
       },
     ]);
   }

@@ -1,14 +1,26 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm';
 
-import { BaseEntity } from '../../../../@core/entities/base.entity';
-import type { Comment } from '../../../comments/domain/entities/comment.entity';
-import type { Post } from '../../../posts/domain/entities/post.entity';
+import { BaseEntity }                                      from '../../../../@core/entities/base.entity';
+import type { Comment }                                    from '../../../comments/domain/entities/comment.entity';
+import type { Post }                                       from '../../../posts/domain/entities/post.entity';
+
+enum AccountType {
+  facebook = 'facebook',
+  google = 'google',
+}
+
+@Entity()
+export class Account extends BaseEntity {
+  @Column({ type: 'enum', enum: AccountType, default: AccountType.facebook })
+  public accountType: AccountType;
+
+  @OneToOne('Account')
+  @JoinColumn()
+  public user: number;
+}
 
 @Entity()
 export class User extends BaseEntity {
-  @PrimaryGeneratedColumn()
-  public id: number;
-
   @Column()
   public username: string;
 

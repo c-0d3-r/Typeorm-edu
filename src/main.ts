@@ -18,7 +18,7 @@ async function bootstrap() {
   );
 
   const dataSource = app.get(DataSource);
-  seedData(dataSource);
+  await seedData(dataSource);
 
   await app.listen(process.env.PORT || DEFAULT_PORT);
 }
