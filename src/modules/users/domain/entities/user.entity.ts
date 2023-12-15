@@ -1,8 +1,17 @@
-import { Column, Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToMany,
+  OneToMany,
+  OneToOne,
+} from 'typeorm';
 
-import { BaseEntity }                                      from '../../../../@core/entities/base.entity';
-import type { Comment }                                    from '../../../comments/domain/entities/comment.entity';
-import type { Post }                                       from '../../../posts/domain/entities/post.entity';
+import type { Product } from 'src/modules/products/domain/entities/product.entity';
+
+import { BaseEntity }   from '../../../../@core/entities/base.entity';
+import type { Comment } from '../../../comments/domain/entities/comment.entity';
+import type { Post }    from '../../../posts/domain/entities/post.entity';
 
 enum AccountType {
   facebook = 'facebook',
@@ -36,4 +45,7 @@ export class User extends BaseEntity {
 
   @OneToMany('Post', 'author')
   public posts: Post[];
+
+  @ManyToMany('Product', 'users')
+  public products: Product[];
 }

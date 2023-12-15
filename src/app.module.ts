@@ -6,6 +6,7 @@ import databaseConf, { type DatabaseConfig } from './@core/config/db.config';
 import { AppController }                     from './app.controller';
 import { CommentsModule }                    from './modules/comments/comments.module';
 import { PostsModule }                       from './modules/posts/posts.module';
+import { ProductsModule }                    from './modules/products/products.module';
 import { UsersModule }                       from './modules/users/users.module';
 
 @Module({
@@ -22,9 +23,10 @@ import { UsersModule }                       from './modules/users/users.module'
       },
       inject: [ConfigService],
     }),
+    PostsModule,
     UsersModule,
     CommentsModule,
-    PostsModule,
+    ProductsModule,
   ],
   controllers: [AppController],
 })
