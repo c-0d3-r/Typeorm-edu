@@ -8,6 +8,9 @@ export class Product extends BaseEntity {
   @Column()
   public title: string;
 
+  @Column({ default: '' })
+  public description: string;
+
   @ManyToMany('User', 'products', { nullable: false })
   @JoinTable({
     name: 'users_products',
