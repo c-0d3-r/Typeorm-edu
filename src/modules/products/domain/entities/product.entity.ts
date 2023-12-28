@@ -1,10 +1,11 @@
-import { Column, Entity, JoinTable, ManyToMany } from 'typeorm';
+import { Column, Entity, Index, JoinTable, ManyToMany } from 'typeorm';
 
-import { BaseEntity }                            from '../../../../@core/entities/base.entity';
-import type { User }                             from '../../../users/domain/entities/user.entity';
+import { BaseEntity }                                   from '../../../../@core/entities/base.entity';
+import type { User }                                    from '../../../users/domain/entities/user.entity';
 
 @Entity()
 export class Product extends BaseEntity {
+  @Index('product_title', { unique: true })
   @Column()
   public title: string;
 

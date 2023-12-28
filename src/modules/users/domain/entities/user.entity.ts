@@ -1,7 +1,7 @@
 import {
   Column,
   Entity,
-  JoinColumn,
+  Index,
   ManyToMany,
   OneToMany,
   OneToOne,
@@ -9,35 +9,26 @@ import {
 
 import type { Product } from 'src/modules/products/domain/entities/product.entity';
 
+import type { Account } from './account.entity';
 import { BaseEntity }   from '../../../../@core/entities/base.entity';
 import type { Comment } from '../../../comments/domain/entities/comment.entity';
 import type { Post }    from '../../../posts/domain/entities/post.entity';
 
-enum AccountType {
-  facebook = 'facebook',
-  google = 'google',
-}
-
 @Entity()
-export class Account extends BaseEntity {
-  @Column({ type: 'enum', enum: AccountType, default: AccountType.facebook })
-  public accountType: AccountType;
-
-  @OneToOne('Account')
-  @JoinColumn()
-  public user: number;
-}
-
-@Entity()
+// @Index(['username', 'email'], { unique: true })
 export class User extends BaseEntity {
   @Column()
   public username: string;
 
   @Column()
+  @Index('userEmail', { unique: true })
   public email: string;
 
   @Column({ nullable: true })
   public tel: string;
+
+  @OneToOne('Account')
+  public account: Account;
 
   // @OneToMany(() => Comment, (comment) => comment.author)
   @OneToMany('Comment', 'author')
