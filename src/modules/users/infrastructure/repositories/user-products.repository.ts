@@ -23,20 +23,24 @@ export class UserProductsRepository {
       const result = await this.products
         .createQueryBuilder('p')
         // u -> alias for joined table
+        .leftJoin('p.users', 'u')
         // .leftJoinAndSelect('p.users', 'u')
         // .leftJoinAndSelect('p.users', 'u', 'p.title  = :title', {
         //   title: 'Spider Man',
         // })
-        .leftJoinAndMapOne('p.userInfo', 'p.users', 'u')
-        .select([
-          'p.id',
-          'p.title',
-          'p.createdAt',
-          'p.updatedAt',
-          'u.id',
-          'u.username',
-        ])
+        // .leftJoinAndMapOne('p.userInfo', 'p.users', 'u')
+        // .select([
+        //   'p.id',
+        //   'p.title',
+        //   'p.createdAt',
+        //   'p.updatedAt',
+        //   'u.id',
+        //   'u.username',
+        // ])
         .where('u.id = :userId', { userId })
+        // .andWhere('u.username = :userName', { userName: 'bob' })
+        // .select('p.*')
+        // .addSelect('u.username', 'userName')
         .orderBy('p.id', 'DESC')
         .getManyAndCount();
 
