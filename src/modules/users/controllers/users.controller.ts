@@ -7,21 +7,28 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
+import { CommandBus, QueryBus }   from '@nestjs/cqrs';
 
 import { CreateProductDto }       from 'src/modules/products/application/dtos/create-product.dto';
 import type { Product }           from 'src/modules/products/domain/entities/product.entity';
 
 import { CreateUserDto }          from '../application/dtos/create-user.dto';
 import { GetUserDto }             from '../application/dtos/get-user.dto';
+import { GetUserQueryCommand }    from '../application/queries/get-user.query';
+import { CreateUserCommand }      from '../application/use-cases/create-user.use-case';
 import type { User }              from '../domain/entities/user.entity';
 import { UserProductsRepository } from '../infrastructure/repositories/user-products.repository';
+import { UsersQueryRepository }   from '../infrastructure/repositories/users.query.repository';
 import { UsersRepository }        from '../infrastructure/repositories/users.repository';
 
 @Controller('users')
 export class UsersControllers {
   public constructor(
     private readonly usersRepository: UsersRepository,
+    private readonly usersQueryRepository: UsersQueryRepository,
     private readonly userProductsRepository: UserProductsRepository,
+    private readonly commandBus: CommandBus,
+    private readonly queryBus: QueryBus,
   ) {}
 
   @Get('all')
@@ -29,22 +36,27 @@ export class UsersControllers {
     @Query('name') name?: string,
   ): Promise<[User[], number]> {
     if (name) {
-      const result = await this.usersRepository.findByName(name);
+      const result = await this.usersQueryRepository.findByName(name);
 
       return [result, result.length];
     }
 
-    return this.usersRepository.getAllAndCount();
+    return this.usersQueryRepository.getAllAndCount();
   }
 
   @Post()
   public async save(@Body() data: CreateUserDto): Promise<User> {
-    return this.usersRepository.save(data);
+    const { username, email, tel } = data;
+    const result = await this.commandBus.execute(
+      new CreateUserCommand(username, email, tel),
+    );
+
+    return result;
   }
 
   @Get(':id')
   public async getById(@Param('id') id: number): Promise<User> {
-    return this.usersRepository.getOneById(id);
+    return this.queryBus.execute(new GetUserQueryCommand(id));
   }
 
   @Delete(':id')
@@ -54,7 +66,7 @@ export class UsersControllers {
 
   @Get()
   public async getOneByQuery(@Body() body: GetUserDto): Promise<User> {
-    return this.usersRepository.getOneByQuery(body);
+    return this.usersQueryRepository.getOneByQuery(body);
   }
 
   @Get(':id/products')
