@@ -7,6 +7,7 @@ import { Comment }          from 'src/modules/comments/domain/entities/comment.e
 import { CreateCommentDto } from '../../application/dtos/create-comment.dto';
 import { CreatePostDto }    from '../../application/dtos/create-post.dto';
 import { Post }             from '../../domain/entities/post.entity';
+import { UpdatePostDto }    from '../../application/dtos/update-post.dto';
 
 @Injectable()
 export class PostsRepository {
@@ -62,15 +63,26 @@ export class PostsRepository {
     }
   }
 
-  public async create(data: CreatePostDto): Promise<Post> {
+  public async update(id: number, data: UpdatePostDto): Promise<void> {
     try {
-      await this.posts
+      const result = await this.posts
         .createQueryBuilder()
         .update()
-        .set({ title: 'Timber', content: 'Saw' })
-        .where('id = :id', { id: 1 })
-        .andWhere('id = :id2', { id2: 2 })
+        .set(data)
+        .where('id = :id', { id })
+        .orWhere('authorId = :authorId', { authorId: 44 })
         .execute();
+
+      console.log(result);
+    } catch (error) {
+      console.log(error);
+
+      return null;
+    }
+  }
+
+  public async create(data: CreatePostDto): Promise<Post> {
+    try {
       const result = await this.posts.save(data);
 
       return result;

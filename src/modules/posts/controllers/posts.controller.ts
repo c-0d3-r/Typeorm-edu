@@ -1,11 +1,21 @@
-import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseIntPipe,
+  Post,
+  Put,
+  Query,
+} from '@nestjs/common';
 
-import { Comment }                                   from 'src/modules/comments/domain/entities/comment.entity';
+import { Comment }            from 'src/modules/comments/domain/entities/comment.entity';
 
-import { CreateCommentDto }                          from '../application/dtos/create-comment.dto';
-import { CreatePostDto }                             from '../application/dtos/create-post.dto';
-import { Post as PostEntity }                        from '../domain/entities/post.entity';
-import { PostsRepository }                           from '../infrastructure/repositories/posts.repository';
+import { CreateCommentDto }   from '../application/dtos/create-comment.dto';
+import { CreatePostDto }      from '../application/dtos/create-post.dto';
+import { Post as PostEntity } from '../domain/entities/post.entity';
+import { PostsRepository }    from '../infrastructure/repositories/posts.repository';
+import { UpdatePostDto }      from '../application/dtos/update-post.dto';
 
 @Controller('posts')
 export class PostsController {
@@ -19,6 +29,15 @@ export class PostsController {
   @Post(':id/comments')
   public async createComment(@Body() data: CreateCommentDto): Promise<Comment> {
     return this.postsRepository.createComment(data);
+  }
+
+  @Put(':id')
+  public async updateComment(
+    @Param('id') id: number,
+    @Body() data: UpdatePostDto,
+  ): Promise<void> {
+    console.log(typeof id);
+    return this.postsRepository.update(id, data);
   }
 
   @Get('all')
