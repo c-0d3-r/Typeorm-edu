@@ -47,13 +47,32 @@ export class PostsRepository {
     }
   }
 
-  public async findByTitle(title: string): Promise<[Post[], number]> {
+  public async findByTitle(
+    title: string,
+    // { size, page }: { size: number; page: number } = { size: 1, page: 2 },
+  ): Promise<[Post[], number]> {
     try {
       const result = await this.posts
         .createQueryBuilder('p')
-        .where('p.title = :title', { title })
-        // .leftJoinAndSelect('p.author', 'a')
+        // .createQueryBuilder()
+        // .where('title = :title', { title })
+        // .leftJoin('p.author', 'a')
+        .leftJoinAndSelect('p.author', 'a')
+        // .leftJoinAndMapOne('p.postAuthor', 'p.author', 'a')
+        // .select(['p.title', 'a.username'])
+        // .select('a.*')
+        // .skip((page - 1) * size)
+        // .take(size)
         .getManyAndCount();
+
+      // const rawData = await this.posts
+      //   .createQueryBuilder('p')
+      //   .leftJoinAndSelect('p.author', 'a')
+      //   .select(['p.title', 'a.username'])
+      //   .addSelect('SUM(2 + 2)', 'sum')
+      //   .getRawMany();
+
+      // console.log(rawData);
 
       return result;
     } catch (error) {
