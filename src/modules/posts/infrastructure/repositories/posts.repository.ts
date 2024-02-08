@@ -66,7 +66,7 @@ export class PostsRepository {
     try {
       await this.posts
         .createQueryBuilder()
-        .update(Post)
+        .update()
         .set({ title: 'Timber', content: 'Saw' })
         .where('id = :id', { id: 1 })
         .andWhere('id = :id2', { id2: 2 })
