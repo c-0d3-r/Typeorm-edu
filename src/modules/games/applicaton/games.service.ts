@@ -18,8 +18,8 @@ export class GamesService {
 
     if (!game) return null;
 
-    // This delay is made so you can do two "simultaneous" requests at the same time
-    // through Postman or any other HTTP client to see race conditions
+    // This delay is made so you can do two+ "simultaneous" requests
+    // through Postman or any other HTTP client to watch race conditions
     await new Promise((r) => setTimeout(r, 5000));
 
     game.status = GameStatus.InProgress;

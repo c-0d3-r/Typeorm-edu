@@ -22,12 +22,12 @@ export class GamesController {
   }
 
   @Get(':id')
-  async getById(@Param('id') id: number): Promise<Game> {
+  public async getById(@Param('id') id: number): Promise<Game> {
     return await this.gamesRepository.getOneById(id);
   }
 
   @Post('join')
-  async join(@Body('userId') userId: number): Promise<Game | null> {
+  public async join(@Body('userId') userId: number): Promise<Game | null> {
     return await this.gamesService.join(userId);
   }
 }
