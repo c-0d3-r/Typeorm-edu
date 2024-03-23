@@ -8,6 +8,7 @@ import { CommentsModule }                    from './modules/comments/comments.m
 import { PostsModule }                       from './modules/posts/posts.module';
 import { ProductsModule }                    from './modules/products/products.module';
 import { UsersModule }                       from './modules/users/users.module';
+import { GamesModule }                       from './modules/games/games.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { UsersModule }                       from './modules/users/users.module'
     UsersModule,
     CommentsModule,
     ProductsModule,
+    GamesModule,
   ],
   controllers: [AppController],
 })
